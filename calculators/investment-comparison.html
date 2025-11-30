@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Investment Comparison Calculator | Compare Stocks, Real Estate & Bonds</title>
+    <meta name="description" content="Compare investment returns across stocks, real estate, bonds and crypto. Free investment comparison calculator for better portfolio decisions.">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/calculator.css">
+</head>
+<body>
+        <header class="header">
+        <nav class="nav">
+            <div class="logo">
+                <a href="../index.html" style="text-decoration: none; color: inherit;">
+                    <h1>EarningPotentialCalculator.investments</h1>
+                </a>
+            </div>
+            <div class="nav-links">
+                <a href="../index.html">Home</a>
+                <a href="../about.html">About</a>
+                <a href="../faq.html">FAQ</a>
+                <a href="../contact.html">Contact</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main">
+        <div class="calculator-container">
+            <div class="calculator-header">
+                <h1>Investment Comparison Calculator</h1>
+                <p>Compare potential returns across different investment types</p>
+            </div>
+
+            <div class="calculator-grid-2col">
+                <div class="calculator-form">
+                    <h3>Investment Parameters</h3>
+                    
+                    <div class="form-group">
+                        <label for="initialInvestment">Initial Investment ($)</label>
+                        <input type="number" id="initialInvestment" value="10000" min="0">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="monthlyContribution">Monthly Contribution ($)</label>
+                        <input type="number" id="monthlyContribution" value="500" min="0">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="investmentPeriod">Investment Period (Years)</label>
+                        <input type="number" id="investmentPeriod" value="10" min="1" max="50">
+                    </div>
+
+                    <h4>Investment Options</h4>
+                    
+                    <div class="investment-option">
+                        <label>
+                            <input type="checkbox" id="stocksEnabled" checked>
+                            Stocks (S&P 500)
+                        </label>
+                        <input type="number" id="stocksReturn" value="7" min="0" max="50" step="0.1">%
+                    </div>
+
+                    <div class="investment-option">
+                        <label>
+                            <input type="checkbox" id="realEstateEnabled" checked>
+                            Real Estate
+                        </label>
+                        <input type="number" id="realEstateReturn" value="6" min="0" max="50" step="0.1">%
+                    </div>
+
+                    <div class="investment-option">
+                        <label>
+                            <input type="checkbox" id="bondsEnabled" checked>
+                            Bonds
+                        </label>
+                        <input type="number" id="bondsReturn" value="3" min="0" max="50" step="0.1">%
+                    </div>
+
+                    <div class="investment-option">
+                        <label>
+                            <input type="checkbox" id="cryptoEnabled">
+                            Crypto
+                        </label>
+                        <input type="number" id="cryptoReturn" value="12" min="0" max="100" step="0.1">%
+                    </div>
+
+                    <button onclick="calculateComparison()" class="btn-primary calculate-btn">Compare Investments</button>
+                </div>
+
+                <div class="calculator-results">
+                    <h3>Comparison Results</h3>
+                    <div id="resultsContainer" class="results-placeholder">
+                        <p>Enter your parameters and click "Compare Investments" to see results</p>
+                    </div>
+                    <div id="chartContainer" class="chart-container">
+                        <!-- Chart will be generated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>EarningPotentialCalculator.investments</h3>
+                <p>Advanced investment calculators for informed financial decisions.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Legal</h4>
+                <nav class="footer-links">
+                    <a href="../legal/privacy-policy.html">Privacy Policy</a>
+                    <a href="../legal/terms-of-service.html">Terms of Service</a>
+                    <a href="../legal/disclaimer.html">Financial Disclaimer</a>
+                </nav>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 EarningPotentialCalculator.investments. Educational purposes only.</p>
+        </div>
+    </footer>
+
+    <script src="../assets/js/calculator-core.js"></script>
+    <script>
+    function calculateComparison() {
+        const initialInvestment = parseFloat(document.getElementById('initialInvestment').value);
+        const monthlyContribution = parseFloat(document.getElementById('monthlyContribution').value);
+        const years = parseFloat(document.getElementById('investmentPeriod').value);
+        
+        const investments = [];
+        
+        if (document.getElementById('stocksEnabled').checked) {
+            investments.push({
+                name: 'Stocks',
+                return: parseFloat(document.getElementById('stocksReturn').value) / 100,
+                color: '#2563eb'
+            });
+        }
+        
+        if (document.getElementById('realEstateEnabled').checked) {
+            investments.push({
+                name: 'Real Estate',
+                return: parseFloat(document.getElementById('realEstateReturn').value) / 100,
+                color: '#059669'
+            });
+        }
+        
+        if (document.getElementById('bondsEnabled').checked) {
+            investments.push({
+                name: 'Bonds',
+                return: parseFloat(document.getElementById('bondsReturn').value) / 100,
+                color: '#dc2626'
+            });
+        }
+        
+        if (document.getElementById('cryptoEnabled').checked) {
+            investments.push({
+                name: 'Crypto',
+                return: parseFloat(document.getElementById('cryptoReturn').value) / 100,
+                color: '#f59e0b'
+            });
+        }
+        
+        if (investments.length === 0) {
+            alert('Please select at least one investment type');
+            return;
+        }
+        
+        const results = investments.map(inv => {
+            const futureValue = calculateFutureValue(initialInvestment, monthlyContribution, inv.return, years);
+            return {
+                name: inv.name,
+                futureValue: futureValue,
+                color: inv.color,
+                totalContributions: initialInvestment + (monthlyContribution * 12 * years),
+                profit: futureValue - (initialInvestment + (monthlyContribution * 12 * years))
+            };
+        });
+        
+        displayComparisonResults(results);
+    }
+    
+    function displayComparisonResults(results) {
+        const container = document.getElementById('resultsContainer');
+        let html = '<div class="results-grid">';
+        
+        results.forEach(result => {
+            html += `
+                <div class="result-item" style="border-left: 4px solid ${result.color}">
+                    <h4>${result.name}</h4>
+                    <div class="result-value">$${result.futureValue.toLocaleString('en-US', {maximumFractionDigits: 0})}</div>
+                    <div class="result-detail">Total Profit: $${result.profit.toLocaleString('en-US', {maximumFractionDigits: 0})}</div>
+                </div>
+            `;
+        });
+        
+        html += '</div>';
+        container.innerHTML = html;
+        
+        // Simple chart implementation
+        const chartContainer = document.getElementById('chartContainer');
+        chartContainer.innerHTML = '<h4>Investment Growth Comparison</h4><div class="chart-bars">';
+        
+        const maxValue = Math.max(...results.map(r => r.futureValue));
+        
+        results.forEach(result => {
+            const percentage = (result.futureValue / maxValue) * 100;
+            chartContainer.innerHTML += `
+                <div class="chart-bar">
+                    <div class="bar-label">${result.name}</div>
+                    <div class="bar-container">
+                        <div class="bar" style="width: ${percentage}%; background-color: ${result.color}"></div>
+                    </div>
+                    <div class="bar-value">$${result.futureValue.toLocaleString('en-US', {maximumFractionDigits: 0})}</div>
+                </div>
+            `;
+        });
+        
+        chartContainer.innerHTML += '</div>';
+    }
+    </script>
+</body>
+</html>

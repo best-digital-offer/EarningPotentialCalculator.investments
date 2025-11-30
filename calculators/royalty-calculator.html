@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Royalty Investment Calculator | Music Royalties & Crowdfunding Returns</title>
+    <meta name="description" content="Calculate potential returns from royalty investments. Music royalties calculator, royalty crowdfunding returns, and alternative investment analysis.">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/calculator.css">
+</head>
+<body>
+        <header class="header">
+        <nav class="nav">
+            <div class="logo">
+                <a href="../index.html" style="text-decoration: none; color: inherit;">
+                    <h1>EarningPotentialCalculator.investments</h1>
+                </a>
+            </div>
+            <div class="nav-links">
+                <a href="../index.html">Home</a>
+                <a href="../about.html">About</a>
+                <a href="../faq.html">FAQ</a>
+                <a href="../contact.html">Contact</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main">
+        <div class="calculator-container">
+            <div class="calculator-header">
+                <h1>Royalty Investment Calculator</h1>
+                <p>Calculate potential earnings from music royalties and crowdfunding platforms</p>
+            </div>
+
+            <div class="calculator-grid-2col">
+                <div class="calculator-form">
+                    <h3>Royalty Investment Scenario</h3>
+                    
+                    <div class="form-group">
+                        <label for="royaltyType">Royalty Type</label>
+                        <select id="royaltyType">
+                            <option value="music">Music Royalties</option>
+                            <option value="patent">Patent Royalties</option>
+                            <option value="book">Book Royalties</option>
+                            <option value="crowdfunding">Royalty Crowdfunding</option>
+                            <option value="custom">Custom Royalty</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="royaltyInvestment">Initial Investment ($)</label>
+                        <input type="number" id="royaltyInvestment" value="5000" min="100">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="royaltyTerm">Investment Term (Years)</label>
+                        <input type="number" id="royaltyTerm" value="5" min="1" max="30">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="annualRoyaltyRate">Annual Royalty Rate (%)</label>
+                        <input type="number" id="annualRoyaltyRate" value="8" min="1" max="50" step="0.1">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="royaltyGrowth">Annual Royalty Growth (%)</label>
+                        <input type="number" id="royaltyGrowth" value="2" min="0" max="20" step="0.1">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="platformFees">Platform/Management Fees (%)</label>
+                        <input type="number" id="platformFees" value="15" min="0" max="50" step="0.1">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="exitMultiple">Exit Multiple (if applicable)</label>
+                        <input type="number" id="exitMultiple" value="1.5" min="0.5" max="5" step="0.1">
+                        <small>Multiply final value by this amount at exit</small>
+                    </div>
+
+                    <button onclick="calculateRoyaltyReturns()" class="btn-primary calculate-btn">Calculate Royalty Returns</button>
+                </div>
+
+                <div class="calculator-results">
+                    <h3>Royalty Investment Results</h3>
+                    <div id="royaltyResults" class="results-placeholder">
+                        <p>Enter your royalty investment parameters to see projected returns</p>
+                    </div>
+                    <div id="royaltyChart" class="chart-container">
+                        <!-- Chart will be generated here -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="calculator-info">
+                <h3>Understanding Royalty Investments</h3>
+                <p>Royalty investments involve purchasing a share of future revenue streams from intellectual property like music, patents, or books. Key considerations:</p>
+                <ul>
+                    <li><strong>Music Royalties:</strong> Income from song plays, streaming, and licensing</li>
+                    <li><strong>Patent Royalties:</strong> Payments for use of patented technology</li>
+                    <li><strong>Book Royalties:</strong> Earnings from book sales and adaptations</li>
+                    <li><strong>Royalty Crowdfunding:</strong> Platform-based investments in various royalty streams</li>
+                </ul>
+                <p><strong>Note:</strong> Royalty investments are typically illiquid and carry higher risk. Returns can be unpredictable and dependent on the success of the underlying intellectual property.</p>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>EarningPotentialCalculator.investments</h3>
+                <p>Advanced investment calculators for informed financial decisions.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Legal</h4>
+                <nav class="footer-links">
+                    <a href="../legal/privacy-policy.html">Privacy Policy</a>
+                    <a href="../legal/terms-of-service.html">Terms of Service</a>
+                    <a href="../legal/disclaimer.html">Financial Disclaimer</a>
+                </nav>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 EarningPotentialCalculator.investments. Educational purposes only.</p>
+        </div>
+    </footer>
+
+    <script>
+    function calculateRoyaltyReturns() {
+        const investment = parseFloat(document.getElementById('royaltyInvestment').value);
+        const years = parseFloat(document.getElementById('royaltyTerm').value);
+        const annualRate = parseFloat(document.getElementById('annualRoyaltyRate').value) / 100;
+        const growthRate = parseFloat(document.getElementById('royaltyGrowth').value) / 100;
+        const fees = parseFloat(document.getElementById('platformFees').value) / 100;
+        const exitMultiple = parseFloat(document.getElementById('exitMultiple').value);
+        const royaltyType = document.getElementById('royaltyType').value;
+
+        let totalRoyalties = 0;
+        let annualRoyalties = [];
+        let currentInvestment = investment;
+
+        for (let year = 1; year <= years; year++) {
+            // Calculate royalty for this year (with growth)
+            const royaltyRate = annualRate * Math.pow(1 + growthRate, year - 1);
+            let annualRoyalty = currentInvestment * royaltyRate;
+            
+            // Apply platform fees
+            annualRoyalty *= (1 - fees);
+            
+            annualRoyalties.push({
+                year: year,
+                royalty: annualRoyalty,
+                rate: royaltyRate * 100
+            });
+            
+            totalRoyalties += annualRoyalty;
+            
+            // For some royalty types, the investment may grow
+            if (royaltyType === 'crowdfunding' || royaltyType === 'custom') {
+                currentInvestment *= (1 + (growthRate * 0.5)); // Conservative growth
+            }
+        }
+
+        // Calculate final value with exit multiple
+        const finalValue = (investment + totalRoyalties) * exitMultiple;
+        const totalReturn = finalValue - investment;
+        const annualizedReturn = (Math.pow(finalValue / investment, 1 / years) - 1) * 100;
+
+        displayRoyaltyResults({
+            initial: investment,
+            final: finalValue,
+            totalReturn: totalReturn,
+            annualizedReturn: annualizedReturn,
+            totalRoyalties: totalRoyalties,
+            annualRoyalties: annualRoyalties,
+            royaltyType: royaltyType,
+            years: years
+        });
+    }
+
+    function displayRoyaltyResults(data) {
+        const container = document.getElementById('royaltyResults');
+        container.innerHTML = `
+            <div class="results-grid">
+                <div class="result-item" style="border-left: 4px solid #7c3aed">
+                    <h4>Initial Investment</h4>
+                    <div class="result-value">$${data.initial.toLocaleString('en-US', {maximumFractionDigits: 0})}</div>
+                </div>
+                <div class="result-item" style="border-left: 4px solid #2563eb">
+                    <h4>Final Value</h4>
+                    <div class="result-value">$${data.final.toLocaleString('en-US', {maximumFractionDigits: 0})}</div>
+                </div>
+                <div class="result-item" style="border-left: 4px solid #059669">
+                    <h4>Total Return</h4>
+                    <div class="result-value">$${data.totalReturn.toLocaleString('en-US', {maximumFractionDigits: 0})}</div>
+                </div>
+                <div class="result-item" style="border-left: 4px solid #d97706">
+                    <h4>Annualized Return</h4>
+                    <div class="result-value">${data.annualizedReturn.toFixed(1)}%</div>
+                </div>
+                <div class="result-item" style="border-left: 4px solid #dc2626">
+                    <h4>Total Royalties Collected</h4>
+                    <div class="result-value">$${data.totalRoyalties.toLocaleString('en-US', {maximumFractionDigits: 0})}</div>
+                </div>
+            </div>
+        `;
+
+        // Royalty income chart
+        const chartContainer = document.getElementById('royaltyChart');
+        chartContainer.innerHTML = '<h4>Annual Royalty Income</h4><div class="chart-bars">';
+        
+        const maxRoyalty = Math.max(...data.annualRoyalties.map(r => r.royalty));
+        
+        data.annualRoyalties.forEach(result => {
+            const percentage = (result.royalty / maxRoyalty) * 100;
+            chartContainer.innerHTML += `
+                <div class="chart-bar">
+                    <div class="bar-label">Year ${result.year}</div>
+                    <div class="bar-container">
+                        <div class="bar" style="width: ${percentage}%; background-color: #7c3aed">
+                            <span style="padding-left: 0.5rem;">$${result.royalty.toLocaleString('en-US', {maximumFractionDigits: 0})}</span>
+                        </div>
+                    </div>
+                    <div class="bar-value">${result.rate.toFixed(1)}%</div>
+                </div>
+            `;
+        });
+        
+        chartContainer.innerHTML += '</div>';
+    }
+    </script>
+</body>
+</html>

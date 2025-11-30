@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto Historical Calculator | Bitcoin & Ethereum ROI Calculator</title>
+    <meta name="description" content="Calculate what your crypto investment would be worth today. Bitcoin ROI calculator, Ethereum return calculator and crypto profit analysis.">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/calculator.css">
+</head>
+<body>
+        <header class="header">
+        <nav class="nav">
+            <div class="logo">
+                <a href="../index.html" style="text-decoration: none; color: inherit;">
+                    <h1>EarningPotentialCalculator.investments</h1>
+                </a>
+            </div>
+            <div class="nav-links">
+                <a href="../index.html">Home</a>
+                <a href="../about.html">About</a>
+                <a href="../faq.html">FAQ</a>
+                <a href="../contact.html">Contact</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main">
+        <div class="calculator-container">
+            <div class="calculator-header">
+                <h1>Crypto Historical Calculator</h1>
+                <p>See what your investment would be worth today if you invested in crypto earlier</p>
+            </div>
+
+            <div class="calculator-grid-2col">
+                <div class="calculator-form">
+                    <h3>Investment Scenario</h3>
+                    
+                    <div class="form-group">
+                        <label for="cryptoType">Cryptocurrency</label>
+                        <select id="cryptoType">
+                            <option value="bitcoin">Bitcoin (BTC)</option>
+                            <option value="ethereum">Ethereum (ETH)</option>
+                            <option value="custom">Custom Return</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="investmentAmount">Investment Amount ($)</label>
+                        <input type="number" id="investmentAmount" value="1000" min="1">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="investmentYear">Investment Year</label>
+                        <select id="investmentYear">
+                            <option value="2015">2015</option>
+                            <option value="2016">2016</option>
+                            <option value="2017">2017</option>
+                            <option value="2018">2018</option>
+                            <option value="2019">2019</option>
+                            <option value="2020">2020</option>
+                            <option value="2021">2021</option>
+                            <option value="2022">2022</option>
+                            <option value="2023">2023</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="customReturnGroup" style="display: none;">
+                        <label for="customReturn">Custom Annual Return (%)</label>
+                        <input type="number" id="customReturn" value="100" min="0" max="1000">
+                    </div>
+
+                    <button onclick="calculateCryptoROI()" class="btn-primary calculate-btn">Calculate ROI</button>
+                </div>
+
+                <div class="calculator-results">
+                    <h3>Historical Results</h3>
+                    <div id="cryptoResults" class="results-placeholder">
+                        <p>Select your investment scenario to see potential returns</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>EarningPotentialCalculator.investments</h3>
+                <p>Advanced investment calculators for informed financial decisions.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Legal</h4>
+                <nav class="footer-links">
+                    <a href="../legal/privacy-policy.html">Privacy Policy</a>
+                    <a href="../legal/terms-of-service.html">Terms of Service</a>
+                    <a href="../legal/disclaimer.html">Financial Disclaimer</a>
+                </nav>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 EarningPotentialCalculator.investments. Educational purposes only.</p>
+        </div>
+    </footer>
+
+    <script>
+    document.getElementById('cryptoType').addEventListener('change', function() {
+        document.getElementById('customReturnGroup').style.display = 
+            this.value === 'custom' ? 'block' : 'none';
+    });
+
+    function calculateCryptoROI() {
+        const cryptoType = document.getElementById('cryptoType').value;
+        const amount = parseFloat(document.getElementById('investmentAmount').value);
+        const year = parseInt(document.getElementById('investmentYear').value);
+        
+        // Historical price data (simplified)
+        const historicalData = {
+            bitcoin: {
+                2015: 300, 2016: 900, 2017: 13000, 2018: 4000, 
+                2019: 7000, 2020: 29000, 2021: 47000, 2022: 17000, 2023: 42000
+            },
+            ethereum: {
+                2015: 1, 2016: 10, 2017: 700, 2018: 200, 
+                2019: 130, 2020: 700, 2021: 3700, 2022: 1200, 2023: 2200
+            }
+        };
+
+        const currentPrices = {
+            bitcoin: 43000,
+            ethereum: 2300
+        };
+
+        let purchasePrice, currentPrice, coins;
+
+        if (cryptoType === 'custom') {
+            const customReturn = parseFloat(document.getElementById('customReturn').value) / 100;
+            const years = 2024 - year;
+            const futureValue = amount * Math.pow(1 + customReturn, years);
+            
+            displayCryptoResults({
+                initial: amount,
+                current: futureValue,
+                profit: futureValue - amount,
+                roi: ((futureValue - amount) / amount) * 100,
+                coins: amount, // Placeholder for custom
+                type: 'Custom Crypto'
+            });
+            return;
+        }
+
+        purchasePrice = historicalData[cryptoType][year];
+        currentPrice = currentPrices[cryptoType];
+        coins = amount / purchasePrice;
+        const currentValue = coins * currentPrice;
+        const profit = currentValue - amount;
+        const roi = (profit / amount) * 100;
+
+        displayCryptoResults({
+            initial: amount,
+            current: currentValue,
+            profit: profit,
+            roi: roi,
+            coins: coins,
+            type: cryptoType.charAt(0).toUpperCase() + cryptoType.slice(1)
+        });
+    }
+
+    function displayCryptoResults(data) {
+        const container = document.getElementById('cryptoResults');
+        container.innerHTML = `
+            <div class="crypto-results">
+                <div class="result-card">
+                    <h4>Initial Investment</h4>
+                    <div class="result-value">$${data.initial.toLocaleString()}</div>
+                </div>
+                <div class="result-card">
+                    <h4>Current Value</h4>
+                    <div class="result-value highlight">$${data.current.toLocaleString('en-US', {maximumFractionDigits: 0})}</div>
+                </div>
+                <div class="result-card">
+                    <h4>Total Profit/Loss</h4>
+                    <div class="result-value ${data.profit >= 0 ? 'profit' : 'loss'}">
+                        $${data.profit.toLocaleString('en-US', {maximumFractionDigits: 0})}
+                    </div>
+                </div>
+                <div class="result-card">
+                    <h4>ROI</h4>
+                    <div class="result-value ${data.roi >= 0 ? 'profit' : 'loss'}">
+                        ${data.roi.toFixed(1)}%
+                    </div>
+                </div>
+                ${data.coins ? `
+                <div class="result-card">
+                    <h4>Coins Purchased</h4>
+                    <div class="result-value">${data.coins.toFixed(6)} ${data.type}</div>
+                </div>
+                ` : ''}
+            </div>
+        `;
+    }
+    </script>
+</body>
+</html>

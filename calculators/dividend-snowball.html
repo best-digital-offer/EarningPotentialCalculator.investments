@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dividend Snowball Calculator | Dividend Reinvestment & DRIP Calculator</title>
+    <meta name="description" content="Calculate dividend reinvestment growth with our DRIP calculator. See how dividend snowball effect can grow your wealth over time with compound returns.">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/calculator.css">
+</head>
+<body>
+        <header class="header">
+        <nav class="nav">
+            <div class="logo">
+                <a href="../index.html" style="text-decoration: none; color: inherit;">
+                    <h1>EarningPotentialCalculator.investments</h1>
+                </a>
+            </div>
+            <div class="nav-links">
+                <a href="../index.html">Home</a>
+                <a href="../about.html">About</a>
+                <a href="../faq.html">FAQ</a>
+                <a href="../contact.html">Contact</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main">
+        <div class="calculator-container">
+            <div class="calculator-header">
+                <h1>Dividend Snowball Calculator</h1>
+                <p>Calculate the power of dividend reinvestment and compounding returns</p>
+            </div>
+
+            <div class="calculator-grid-2col">
+                <div class="calculator-form">
+                    <h3>Investment Parameters</h3>
+                    
+                    <div class="form-group">
+                        <label for="divInitialInvestment">Initial Investment ($)</label>
+                        <input type="number" id="divInitialInvestment" value="10000" min="0">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="divMonthlyContribution">Monthly Contribution ($)</label>
+                        <input type="number" id="divMonthlyContribution" value="100" min="0">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="divInvestmentPeriod">Investment Period (Years)</label>
+                        <input type="number" id="divInvestmentPeriod" value="20" min="1" max="50">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="dividendYield">Dividend Yield (%)</label>
+                        <input type="number" id="dividendYield" value="3.5" min="0" max="20" step="0.1">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="dividendGrowth">Annual Dividend Growth (%)</label>
+                        <input type="number" id="dividendGrowth" value="5" min="0" max="20" step="0.1">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="stockGrowth">Annual Stock Price Growth (%)</label>
+                        <input type="number" id="stockGrowth" value="7" min="0" max="20" step="0.1">
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="reinvestDividends" checked>
+                            Reinvest Dividends (DRIP)
+                        </label>
+                    </div>
+
+                    <button onclick="calculateDividendSnowball()" class="btn-primary calculate-btn">Calculate Dividend Growth</button>
+                </div>
+
+                <div class="calculator-results">
+                    <h3>Dividend Snowball Results</h3>
+                    <div id="dividendResults" class="results-placeholder">
+                        <p>Enter your parameters to see dividend growth projection</p>
+                    </div>
+                    <div id="dividendChart" class="chart-container">
+                        <!-- Chart will be generated here -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="calculator-info">
+                <h3>About Dividend Snowball Effect</h3>
+                <p>The dividend snowball effect occurs when you reinvest your dividends to purchase more shares, which then generate their own dividends. Over time, this creates exponential growth through compounding. The key factors are:</p>
+                <ul>
+                    <li><strong>Dividend Yield:</strong> The annual dividend payment as a percentage of the stock price</li>
+                    <li><strong>Dividend Growth:</strong> How much the dividend increases each year</li>
+                    <li><strong>Reinvestment:</strong> Using dividends to buy more shares (DRIP)</li>
+                    <li><strong>Time:</strong> The longer the timeframe, the more powerful the compounding</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>EarningPotentialCalculator.investments</h3>
+                <p>Advanced investment calculators for informed financial decisions.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Legal</h4>
+                <nav class="footer-links">
+                    <a href="../legal/privacy-policy.html">Privacy Policy</a>
+                    <a href="../legal/terms-of-service.html">Terms of Service</a>
+                    <a href="../legal/disclaimer.html">Financial Disclaimer</a>
+                </nav>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 EarningPotentialCalculator.investments. Educational purposes only.</p>
+        </div>
+    </footer>
+
+    <script>
+    function calculateDividendSnowball() {
+        const initialInvestment = parseFloat(document.getElementById('divInitialInvestment').value);
+        const monthlyContribution = parseFloat(document.getElementById('divMonthlyContribution').value);
+        const years = parseFloat(document.getElementById('divInvestmentPeriod').value);
+        const dividendYield = parseFloat(document.getElementById('dividendYield').value) / 100;
+        const dividendGrowth = parseFloat(document.getElementById('dividendGrowth').value) / 100;
+        const stockGrowth = parseFloat(document.getElementById('stockGrowth').value) / 100;
+        const reinvestDividends = document.getElementById('reinvestDividends').checked;
+
+        let portfolioValue = initialInvestment;
+        let totalShares = initialInvestment; // Assuming $1 per share for simplicity
+        let annualDividendIncome = 0;
+        let totalDividendsCollected = 0;
+
+        const results = [];
+        
+        for (let year = 1; year <= years; year++) {
+            // Calculate current dividend yield for this year (with growth)
+            const currentDividendYield = dividendYield * Math.pow(1 + dividendGrowth, year - 1);
+            
+            // Calculate annual dividend income
+            annualDividendIncome = portfolioValue * currentDividendYield;
+            
+            if (reinvestDividends) {
+                // Reinvest dividends to buy more shares
+                const newShares = annualDividendIncome; // $1 per share
+                totalShares += newShares;
+            }
+            
+            // Add monthly contributions
+            portfolioValue += monthlyContribution * 12;
+            totalShares += monthlyContribution * 12; // $1 per share
+            
+            // Apply stock price growth
+            portfolioValue *= (1 + stockGrowth);
+            
+            if (reinvestDividends) {
+                portfolioValue = totalShares; // Update portfolio value based on shares
+            }
+            
+            totalDividendsCollected += annualDividendIncome;
+            
+            results.push({
+                year: year,
+                portfolioValue: portfolioValue,
+                dividendIncome: annualDividendIncome,
+                totalDividends: totalDividendsCollected
+            });
+        }
+
+        displayDividendResults(results, reinvestDividends);
+    }
+
+    function displayDividendResults(results, reinvestEnabled) {
+        const finalResult = results[results.length - 1];
+        const initialInvestment = parseFloat(document.getElementById('divInitialInvestment').value);
+        const monthlyContribution = parseFloat(document.getElementById('divMonthlyContribution').value);
+        const years = parseFloat(document.getElementById('divInvestmentPeriod').value);
+        
+        const totalContributions = initialInvestment + (monthlyContribution * 12 * years);
+        const totalValue = finalResult.portfolioValue;
+        const totalDividends = finalResult.totalDividends;
+        
+        const container = document.getElementById('dividendResults');
+        container.innerHTML = `
+            <div class="results-grid">
+                <div class="result-item" style="border-left: 4px solid #2563eb">
+                    <h4>Final Portfolio Value</h4>
+                    <div class="result-value">$${totalValue.toLocaleString('en-US', {maximumFractionDigits: 0})}</div>
+                </div>
+                <div class="result-item" style="border-left: 4px solid #059669">
+                    <h4>Total Contributions</h4>
+                    <div class="result-value">$${totalContributions.toLocaleString('en-US', {maximumFractionDigits: 0})}</div>
+                </div>
+                <div class="result-item" style="border-left: 4px solid #d97706">
+                    <h4>Total Dividends Collected</h4>
+                    <div class="result-value">$${totalDividends.toLocaleString('en-US', {maximumFractionDigits: 0})}</div>
+                </div>
+                <div class="result-item" style="border-left: 4px solid #dc2626">
+                    <h4>Annual Dividend Income (Year ${years})</h4>
+                    <div class="result-value">$${finalResult.dividendIncome.toLocaleString('en-US', {maximumFractionDigits: 0})}</div>
+                </div>
+            </div>
+            ${reinvestEnabled ? '<p><strong>Note:</strong> Dividends are being reinvested (DRIP)</p>' : '<p><strong>Note:</strong> Dividends are taken as cash (not reinvested)</p>'}
+        `;
+
+        // Simple chart for dividend growth
+        const chartContainer = document.getElementById('dividendChart');
+        chartContainer.innerHTML = '<h4>Dividend Income Growth Over Time</h4><div class="chart-bars">';
+        
+        // Show every 5 years or last 5 years
+        const displayYears = results.filter((_, index) => 
+            index === 0 || (index + 1) % 5 === 0 || index >= results.length - 5
+        );
+        
+        const maxDividend = Math.max(...displayYears.map(r => r.dividendIncome));
+        
+        displayYears.forEach(result => {
+            const percentage = (result.dividendIncome / maxDividend) * 100;
+            chartContainer.innerHTML += `
+                <div class="chart-bar">
+                    <div class="bar-label">Year ${result.year}</div>
+                    <div class="bar-container">
+                        <div class="bar" style="width: ${percentage}%; background-color: #059669">
+                            <span style="padding-left: 0.5rem;">$${result.dividendIncome.toLocaleString('en-US', {maximumFractionDigits: 0})}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+        
+        chartContainer.innerHTML += '</div>';
+    }
+    </script>
+</body>
+</html>
