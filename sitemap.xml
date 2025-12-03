@@ -84,5 +84,83 @@
         <changefreq>yearly</changefreq>
         <priority>0.3</priority>
     </url>
+    
+    <!-- Blog Pages - High Priority -->
+    <url>
+        <loc>https://earningpotentialcalculator.investments/blog/</loc>
+        <lastmod>2024-12-15</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    <url>
+        <loc>https://earningpotentialcalculator.investments/blog/compound-interest-calculator-guide.html</loc>
+        <lastmod>2024-12-15</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    
+    <url>
+        <loc>https://earningpotentialcalculator.investments/blog/investment-calculator-retirement-planning.html</loc>
+        <lastmod>2024-12-15</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    
+    <url>
+        <loc>https://earningpotentialcalculator.investments/blog/crypto-investment-calculator-guide.html</loc>
+        <lastmod>2024-12-15</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    
+    <url>
+        <loc>https://earningpotentialcalculator.investments/blog/dividend-investment-calculator-passive-income.html</loc>
+        <lastmod>2024-12-15</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    
+    <url>
+        <loc>https://earningpotentialcalculator.investments/blog/roi-calculator-investment-analysis.html</loc>
+        <lastmod>2024-12-15</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    
+    <url>
+        <loc>https://earningpotentialcalculator.investments/blog/stock-investment-calculator-strategies.html</loc>
+        <lastmod>2024-12-15</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    
+    <url>
+        <loc>https://earningpotentialcalculator.investments/blog/financial-planning-calculator-tools.html</loc>
+        <lastmod>2024-12-15</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    
+    <url>
+        <loc>https://earningpotentialcalculator.investments/blog/wealth-calculator-long-term-growth.html</loc>
+        <lastmod>2024-12-15</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    
+    <url>
+        <loc>https://earningpotentialcalculator.investments/blog/passive-income-calculator-strategies.html</loc>
+        <lastmod>2024-12-15</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    
+    <url>
+        <loc>https://earningpotentialcalculator.investments/blog/investment-return-calculator-analysis.html</loc>
+        <lastmod>2024-12-15</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
 
 </urlset>
